@@ -1,0 +1,10 @@
+FROM golang:1.16 AS base
+ADD . /golang
+WORKDIR /golang
+COPY main.go .
+RUN go build main.go
+
+FROM scratch
+WORKDIR /go
+COPY --from=base /golang /go/
+ENTRYPOINT [ "./main" ]
