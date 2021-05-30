@@ -1,0 +1,49 @@
+version: '3'
+
+services: 
+    db-desafio2-docker:
+        build: 
+            context: ./mysql
+            dockerfile: Dockerfile
+        container_name: db-desafio2-docker
+        command: --innodb-use-native-aio=0
+        command: --init-file /data/application/init.sql
+        volumes: 
+            - ./mysql_data:/var/lib/mysql
+            - ./mysql/init.sql:/data/application/init.sql
+        restart: always
+        tty: true
+        networks: 
+            - wmcruz-desafio2-docker
+    
+    app-desafio2-docker:
+        build: 
+            context: ./node
+            dockerfile: Dockerfile
+        container_name: app-desafio2-docker
+        entrypoint: dockerize -wait tcp://db-desafio2-docker:3306 -timeout 20s docker-entrypoint.sh
+        entrypoint: node index.js
+        tty: true
+        networks: 
+            - wmcruz-desafio2-docker
+        volumes: 
+            - ./node:/usr/src/app
+            - /usr/src/app/node_modules
+        depends_on: 
+            - db-desafio2-docker
+    
+    nginx-desafio2-docker:
+        build: 
+            context: ./nginx
+            dockerfile: Dockerfile
+        container_name: nginx-desafio2-docker
+        ports: 
+            - "8080:80"
+        networks: 
+            - wmcruz-desafio2-docker
+        depends_on: 
+            - app-desafio2-docker
+
+networks: 
+    wmcruz-desafio2-docker: 
+        driver: bridge
