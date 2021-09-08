@@ -51,7 +51,5 @@ Gere o docker-compose de uma forma que basta apenas rodarmos: docker-compose up 
 ### 💻 Comandos
   Para o desafio Nginx com Node.js, basta rodar na para raiz desse projeto o comando abaixo:
   ```
-  docker-compose up -d --build
+  docker-compose up -d
   ```
-  
-  Obs.: para a segunda vez, não precisa do parametro <i>--build</i>
