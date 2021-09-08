@@ -1,4 +1,4 @@
-FROM mysql:5.7.34
+FROM mysql:5.7
 
 ENV MYSQL_DATABASE=desafio2
 ENV MYSQL_ROOT_PASSWORD=root
